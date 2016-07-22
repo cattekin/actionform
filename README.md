@@ -2,9 +2,16 @@
 
 # DISCLAIMER: This project is an experiment and should not be used in applications.
 
-[![Build Status](https://api.travis-ci.org/railsgsoc/actionform.svg?branch=master)](https://travis-ci.org/railsgsoc/actionform)
+[![Build Status](https://api.travis-ci.org/cattekin/actionform.svg?branch=master)](https://travis-ci.org/cattekin/actionform)
 
-Set your models free from the `accepts_nested_attributes_for` helper. Action Form provides an object-oriented approach to represent your forms by building a form object, rather than relying on Active Record internals for doing this. Form objects provide an API to describe the models involved in the form, their attributes and validations. A form object deals with create/update actions of nested objects in a more seamless way.
+Set your models free from the `accepts_nested_attributes_for` helper.
+Action Form provides an object-oriented approach to represent your forms by
+building a form object,
+rather than relying on Active Record internals for doing this.
+Form objects provide an API to describe the models involved in the form,
+their attributes and validations.
+A form object deals with create/update actions of nested objects in a more
+seamless way.
 
 ## Installation
 
@@ -16,7 +23,9 @@ gem 'actionform'
 
 ## Defining Forms
 
-Consider an example where you want to create/update a conference that can have many speakers which can present a single presentation with one form submission. You start by defining a form to represent the root model, `Conference`:
+Consider an example where you want to create/update a conference that can have
+many speakers which can present a single presentation with one form submission.
+You start by defining a form to represent the root model, `Conference`:
 
 ```ruby
 class ConferenceForm < ActionForm::Base
@@ -28,13 +37,18 @@ class ConferenceForm < ActionForm::Base
 end
 ```
 
-Your form object has to subclass `ActionForm::Base` in order to gain the necessary API. When defining the form, you have to specify the main_model the form represents with the following line:
+Your form object has to subclass `ActionForm::Base` in order to gain the
+necessary API.
+When defining the form,
+you have to specify the main_model the form represents with the following line:
 
 ```ruby
 self.main_model = :conference
 ```
 
-To add fields to the form, use the `attributes` or `attribute` class method. The form can also define validation rules for the model it represents. For the `presence` validation rule there is a short inline syntax:
+To add fields to the form, use the `attributes` or `attribute` class method.
+The form can also define validation rules for the model it represents.
+For the `presence` validation rule there is a short inline syntax:
 
 ```ruby
 class ConferenceForm < ActionForm::Base
@@ -44,23 +58,38 @@ end
 
 ## The API
 
-The `ActionForm::Base` class provides a simple API with only a few instance/class methods. Below are listed the instance methods:
+The `ActionForm::Base` class provides a simple API with only a few instance/class
+methods.
+Below are listed the instance methods:
 
 1. `initialize(model)` accepts an instance of the model that the form represents.
-2. `submit(params)` updates the main form's model and nested models with the posted parameters. The models are not saved/updated until you call `save`.
+2. `submit(params)` updates the main form's model and nested models with
+  the posted parameters.
+  The models are not saved/updated until you call `save`.
 3. `errors` returns validation messages in a classy Active Model style.
-4. `save` will call `save` on the model and nested models. This method will validate the model and nested models and if no error arises then it will save them and return true.
+4. `save` will call `save` on the model and nested models.
+  This method will validate the model and nested models and if no error arises
+  then it will save them and return true.
 
 The following are the class methods:
 
-1. `attributes` accepts the names of attributes to define on the form. If you want to declare a presence validation rule for the given attributes, you can pass in the `required: true` option as showcased above. The `attribute` method is aliased to the `attributes` method.
-2. `association(name, options={}, &block)` defines a nested form for the `name` model. If the model is a `has_many` association you can pass in the `records: x` option and fields to create `x` objects will be rendered. If you pass a block, you can define another nested form the same way.
+1. `attributes` accepts the names of attributes to define on the form.
+  If you want to declare a presence validation rule for the given attributes,
+  you can pass in the `required: true` option as showcased above.
+  The `attribute` method is aliased to the `attributes` method.
+2. `association(name, options={}, &block)` defines a nested form for the `name`
+  model.
+  If the model is a `has_many` association you can pass in the `records: x`
+  option and fields to create `x` objects will be rendered.
+  If you pass a block, you can define another nested form the same way.
 
-In addition to the main API, forms expose accessors to the defined attributes. This is used for rendering or manual operations.
+In addition to the main API, forms expose accessors to the defined attributes.
+This is used for rendering or manual operations.
 
 ## Setup
 
-In your controller you create a form instance and pass in the model you want to work on.
+In your controller you create a form instance and pass in the model you want to
+work on.
 
 ```ruby
 class ConferencesController
@@ -82,7 +111,8 @@ class ConferencesController
 end
 ```
 
-Action Form will read property values from the model in setup. Given the following form class.
+Action Form will read property values from the model in setup.
+Given the following form class.
 
 ```ruby
 class ConferenceForm < ActionForm::Base
@@ -94,7 +124,9 @@ Internally, this form will call `conference.name` to populate the name field.
 
 ## Rendering Forms
 
-Your `@conference_form` is now ready to be rendered, either do it yourself or use something like Rails' `form_for`, `simple_form` or `formtastic`.
+Your `@conference_form` is now ready to be rendered,
+either do it yourself or use something like Rails' `form_for`,
+`simple_form` or `formtastic`.
 
 ```erb
 <%= form_for @conference_form do |f| %>
@@ -103,11 +135,14 @@ Your `@conference_form` is now ready to be rendered, either do it yourself or us
 <% end %>
 ```
 
-Nested forms and collections can be easily rendered with `fields_for`, etc. Just use Action Form as if it would be an Active Model instance in the view layer.
+Nested forms and collections can be easily rendered with `fields_for`, etc.
+Just use Action Form as if it would be an Active Model instance in the view
+layer.
 
 ## Syncing Back
 
-After setting up your form object, you can populate the models with the submitted parameters.
+After setting up your form object,
+you can populate the models with the submitted parameters.
 
 ```ruby
 class ConferencesController
@@ -119,11 +154,13 @@ class ConferencesController
 end
 ```
 
-This will write all the properties back to the model. In a nested form, this works recursively, of course.
+This will write all the properties back to the model.
+In a nested form, this works recursively, of course.
 
 ## Saving Forms
 
-After the form is populated with the posted data, you can save the model by calling `save`.
+After the form is populated with the posted data,
+you can save the model by calling `save`.
 
 ```ruby
 class ConferencesController
@@ -133,7 +170,8 @@ class ConferencesController
     @conference_form.submit(conference_params)
 
     if @conference_form.save
-      redirect_to @conference_form, notice: "Conference: #{@conference_form.name} was successfully created." }
+      redirect_to @conference_form,
+        notice: "Conference: #{@conference_form.name} was successfully created."
     else
       render :new
     end
@@ -141,13 +179,16 @@ class ConferencesController
 end
 ```
 
-If the `save` method returns false due to validation errors defined on the form, you can render it again with the data that has been submitted and the errors found.
+If the `save` method returns false due to validation errors defined on the form,
+you can render it again with the data that has been submitted and the errors
+found.
 
 ## Nesting Forms: 1-n Relations
 
 Action Form also gives you nested collections.
 
-Let's define the `has_many :speakers` collection association on the `Conference` model.
+Let's define the `has_many :speakers` collection association on the `Conference`
+model.
 
 ```ruby
 class Conference < ActiveRecord::Base
@@ -168,9 +209,18 @@ class ConferenceForm < ActionForm::Base
 end
 ```
 
-By default, the `association :speakers` declaration will create a single `Speaker` object. You can specify how many objects you want in your form to be rendered with the `new` action as follows: `association: speakers, records: 2`. This will create 2 new `Speaker` objects, and of course fields to create 2 `Speaker` objects. There are also some link helpers to dynamically add/remove objects from collection associations. Read below.
+By default, the `association :speakers` declaration will create a single
+`Speaker` object.
+You can specify how many objects you want in your form to be rendered with the
+`new` action as follows: `association: speakers, records: 2`.
+This will create 2 new `Speaker` objects, and of course fields to create 2
+`Speaker` objects.
+There are also some link helpers to dynamically add/remove objects from
+collection associations.
+Read below.
 
-This basically works like a nested `property` that iterates over a collection of speakers.
+This basically works like a nested `property` that iterates over a collection of
+speakers.
 
 ### has_many: Rendering
 
@@ -218,7 +268,8 @@ end
 
 ### has_one: Rendering
 
-Use `fields_for` in a Rails environment to correctly setup the structure of params.
+Use `fields_for` in a Rails environment to correctly setup the structure of
+params.
 
 ```erb
 <%= form_for @conference_form |f| %>
@@ -241,18 +292,23 @@ Use `fields_for` in a Rails environment to correctly setup the structure of para
 
 Action Form comes with two helpers to deal with this functionality:
 
-1. `link_to_add_association` will display a link that renders fields to create a new object.
-2. `link_to_remove_association` will display a link to remove a existing/dynamic object.
+1. `link_to_add_association` will display a link that renders fields to create a
+  new object.
+2. `link_to_remove_association` will display a link to remove a existing/dynamic
+  object.
 
-In order to use it you have to insert this line: `//= require action_form` to your `app/assets/javascript/application.js` file.
+In order to use it you have to insert this line: `//= require action_form` to
+your `app/assets/javascript/application.js` file.
 
-In our `ConferenceForm` we can dynamically create/remove `Speaker` objects. To do that we would write in the `app/views/conferences/_form.html.erb` partial:
+In our `ConferenceForm` we can dynamically create/remove `Speaker` objects.
+To do that we would write in the `app/views/conferences/_form.html.erb` partial:
 
 ```erb
 <%= form_for @conference_form do |f| %>
   <% if @conference_form.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@conference_form.errors.count, "error") %> prohibited this conference from being saved:</h2>
+      <h2><%= pluralize(@conference_form.errors.count, "error") %>
+        prohibited this conference from being saved:</h2>
 
       <ul>
       <% @conference_form.errors.full_messages.each do |message| %>
@@ -367,8 +423,11 @@ class FeedbacksController
 
 ## Demos
 
-You can find a list of applications using this gem in this repository: https://github.com/m-Peter/nested-form-examples .
-All the examples are implemented in before/after pairs. The before is using the `accepts_nested_attributes_for`, while the after uses this gem to achieve the same functionality.
+You can find a list of applications using this gem in this repository:
+https://github.com/m-Peter/nested-form-examples .
+All the examples are implemented in before/after pairs.
+The before is using the `accepts_nested_attributes_for`,
+while the after uses this gem to achieve the same functionality.
 
 ## Credits
 
